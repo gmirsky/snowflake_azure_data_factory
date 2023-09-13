@@ -11,6 +11,9 @@
 		"ls_testdata_properties_typeProperties_url": {
 			"value": "https://testdata029asa.dfs.core.windows.net/"
 		},
+		"tr_on_arrival_of_new_machines_csv_properties_typeProperties_scope": {
+			"value": "/subscriptions/d3b7bcaf-014c-4a5e-95fe-af002a14ab06/resourceGroups/snowflake_datafactory_rg/providers/Microsoft.Storage/storageAccounts/testdata029asa"
+		},
 		"containerUri": {
 			"value": ""
 		},

@@ -14,6 +14,10 @@
 		"ls_testdata_properties_typeProperties_url": {
 			"type": "string",
 			"defaultValue": "https://testdata029asa.dfs.core.windows.net/"
+		},
+		"tr_on_arrival_of_new_machines_csv_properties_typeProperties_scope": {
+			"type": "string",
+			"defaultValue": "/subscriptions/d3b7bcaf-014c-4a5e-95fe-af002a14ab06/resourceGroups/snowflake_datafactory_rg/providers/Microsoft.Storage/storageAccounts/testdata029asa"
 		}
 	},
 	"variables": {
@@ -190,6 +194,37 @@
 				}
 			},
 			"dependsOn": []
+		},
+		{
+			"name": "[concat(parameters('factoryName'), '/tr_on_arrival_of_new_machines_csv')]",
+			"type": "Microsoft.DataFactory/factories/triggers",
+			"apiVersion": "2018-06-01",
+			"properties": {
+				"description": "Trigger pipeline when a new machines. file arrives",
+				"annotations": [],
+				"runtimeState": "Started",
+				"pipelines": [
+					{
+						"pipelineReference": {
+							"referenceName": "pl_test_data_machines",
+							"type": "PipelineReference"
+						},
+						"parameters": {}
+					}
+				],
+				"type": "BlobEventsTrigger",
+				"typeProperties": {
+					"blobPathBeginsWith": "/raw/blobs/csv/machines.csv",
+					"ignoreEmptyBlobs": true,
+					"scope": "[parameters('tr_on_arrival_of_new_machines_csv_properties_typeProperties_scope')]",
+					"events": [
+						"Microsoft.Storage.BlobCreated"
+					]
+				}
+			},
+			"dependsOn": [
+				"[concat(variables('factoryId'), '/pipelines/pl_test_data_machines')]"
+			]
 		},
 		{
 			"name": "[concat(parameters('factoryName'), '/df_test_data_machines')]",
