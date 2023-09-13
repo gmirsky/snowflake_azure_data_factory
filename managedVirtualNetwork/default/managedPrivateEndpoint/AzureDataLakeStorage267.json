@@ -1,0 +1,7 @@
+{
+	"name": "AzureDataLakeStorage267",
+	"properties": {
+		"privateLinkResourceId": "/subscriptions/d3b7bcaf-014c-4a5e-95fe-af002a14ab06/resourceGroups/snowflake_datafactory_rg/providers/Microsoft.Storage/storageAccounts/snowflakedatafactorysa",
+		"groupId": "dfs"
+	}
+}
