@@ -133,7 +133,7 @@
 				"typeProperties": {
 					"location": {
 						"type": "AzureBlobFSLocation",
-						"fileName": "machines.csv",
+						"fileName": "test_data_machines.csv",
 						"folderPath": "csv",
 						"fileSystem": "raw"
 					},
@@ -214,7 +214,7 @@
 				],
 				"type": "BlobEventsTrigger",
 				"typeProperties": {
-					"blobPathBeginsWith": "/raw/blobs/csv/machines.csv",
+					"blobPathBeginsWith": "/raw/blobs/csv/test_data_machines.csv",
 					"ignoreEmptyBlobs": true,
 					"scope": "[parameters('tr_on_arrival_of_new_machines_csv_properties_typeProperties_scope')]",
 					"events": [
