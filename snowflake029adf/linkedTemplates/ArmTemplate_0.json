@@ -239,6 +239,54 @@
 				"[concat(variables('factoryId'), '/linkedServices/ls_snowflake')]",
 				"[concat(variables('factoryId'), '/linkedServices/ls_testdata')]"
 			]
+		},
+		{
+			"name": "[concat(parameters('factoryName'), '/pl_test_data_machines')]",
+			"type": "Microsoft.DataFactory/factories/pipelines",
+			"apiVersion": "2018-06-01",
+			"properties": {
+				"description": "Pipeline for test data machines",
+				"activities": [
+					{
+						"name": "Data flow test data machines",
+						"type": "ExecuteDataFlow",
+						"dependsOn": [],
+						"policy": {
+							"timeout": "0.00:30:00",
+							"retry": 0,
+							"retryIntervalInSeconds": 30,
+							"secureOutput": false,
+							"secureInput": false
+						},
+						"userProperties": [],
+						"typeProperties": {
+							"dataflow": {
+								"referenceName": "df_test_data_machines",
+								"type": "DataFlowReference",
+								"parameters": {},
+								"datasetParameters": {
+									"sourceTestData": {},
+									"sinkDataToSnowflake": {}
+								}
+							},
+							"staging": {},
+							"compute": {
+								"coreCount": 8,
+								"computeType": "General"
+							},
+							"traceLevel": "Fine"
+						}
+					}
+				],
+				"policy": {
+					"elapsedTimeMetric": {},
+					"cancelAfter": {}
+				},
+				"annotations": []
+			},
+			"dependsOn": [
+				"[concat(variables('factoryId'), '/dataflows/df_test_data_machines')]"
+			]
 		}
 	]
 }
