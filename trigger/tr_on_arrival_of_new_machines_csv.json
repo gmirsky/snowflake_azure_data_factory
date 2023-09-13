@@ -14,7 +14,7 @@
 		],
 		"type": "BlobEventsTrigger",
 		"typeProperties": {
-			"blobPathBeginsWith": "/raw/blobs/csv/machines.csv",
+			"blobPathBeginsWith": "/raw/blobs/csv/test_data_machines.csv",
 			"ignoreEmptyBlobs": true,
 			"scope": "/subscriptions/d3b7bcaf-014c-4a5e-95fe-af002a14ab06/resourceGroups/snowflake_datafactory_rg/providers/Microsoft.Storage/storageAccounts/testdata029asa",
 			"events": [
