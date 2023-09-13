@@ -5,7 +5,7 @@
 		"type": "AzureBlobStorage",
 		"typeProperties": {
 			"serviceEndpoint": "https://snowflake029asa.blob.core.windows.net/",
-			"accountKind": "BlobStorage"
+			"accountKind": "Storage"
 		}
 	}
 }
