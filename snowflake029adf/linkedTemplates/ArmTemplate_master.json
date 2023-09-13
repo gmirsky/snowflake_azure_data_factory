@@ -11,6 +11,10 @@
 			"type": "secureString",
 			"metadata": "Secure string for 'connectionString' of 'ls_snowflake'"
 		},
+		"ls_testdata_properties_typeProperties_url": {
+			"type": "string",
+			"defaultValue": "https://testdata029asa.dfs.core.windows.net/"
+		},
 		"containerUri": {
 			"type": "string",
 			"metadata": "URI to storage account containing linked ARM templates"
@@ -40,6 +44,9 @@
 					},
 					"ls_snowflake_connectionString": {
 						"value": "[parameters('ls_snowflake_connectionString')]"
+					},
+					"ls_testdata_properties_typeProperties_url": {
+						"value": "[parameters('ls_testdata_properties_typeProperties_url')]"
 					}
 				}
 			},

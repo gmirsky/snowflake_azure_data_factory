@@ -7,6 +7,9 @@
 		},
 		"ls_snowflake_connectionString": {
 			"value": ""
+		},
+		"ls_testdata_properties_typeProperties_url": {
+			"value": "https://testdata029asa.dfs.core.windows.net/"
 		}
 	}
 }
