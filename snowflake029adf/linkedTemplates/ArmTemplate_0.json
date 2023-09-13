@@ -189,7 +189,7 @@
 						"          Make as string,",
 						"          Model as string,",
 						"          Category as string,",
-						"          Year as integer",
+						"          Year as decimal(10,0)",
 						"     ),",
 						"     allowSchemaDrift: true,",
 						"     validateSchema: false,",
@@ -230,7 +230,13 @@
 						"     store: 'snowflake',",
 						"     skipDuplicateMapInputs: true,",
 						"     skipDuplicateMapOutputs: true,",
-						"     stageInsert: true) ~> sinkDataToSnowflake"
+						"     stageInsert: true,",
+						"     mapColumn(",
+						"          MAKE = Make,",
+						"          MODEL = Model,",
+						"          CATEGORY = Category,",
+						"          YEAR = Year",
+						"     )) ~> sinkDataToSnowflake"
 					]
 				}
 			},
