@@ -1,0 +1,15 @@
+{
+	"name": "ls_ snowflakedatafactorysa",
+	"properties": {
+		"description": "Link service to storage account snowflakedatafactorysa",
+		"annotations": [],
+		"type": "AzureBlobFS",
+		"typeProperties": {
+			"url": "https://snowflakedatafactorysa.dfs.core.windows.net/"
+		},
+		"connectVia": {
+			"referenceName": "AutoResolveIntegrationRuntime",
+			"type": "IntegrationRuntimeReference"
+		}
+	}
+}
