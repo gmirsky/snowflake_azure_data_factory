@@ -142,6 +142,103 @@
 			"dependsOn": [
 				"[concat(variables('factoryId'), '/linkedServices/ls_testdata')]"
 			]
+		},
+		{
+			"name": "[concat(parameters('factoryName'), '/df_test_data_machines')]",
+			"type": "Microsoft.DataFactory/factories/dataflows",
+			"apiVersion": "2018-06-01",
+			"properties": {
+				"description": "Data flow for test data file machines",
+				"type": "MappingDataFlow",
+				"typeProperties": {
+					"sources": [
+						{
+							"dataset": {
+								"referenceName": "ds_test_data_machines",
+								"type": "DatasetReference"
+							},
+							"name": "sourceTestData"
+						}
+					],
+					"sinks": [
+						{
+							"linkedService": {
+								"referenceName": "ls_snowflake",
+								"type": "LinkedServiceReference"
+							},
+							"name": "sinkDataToSnowflake",
+							"rejectedDataLinkedService": {
+								"referenceName": "ls_testdata",
+								"type": "LinkedServiceReference"
+							}
+						}
+					],
+					"transformations": [
+						{
+							"name": "aggregateDeduplicate"
+						},
+						{
+							"name": "selectDeduplicatedData"
+						},
+						{
+							"name": "sortDepuplicatedData"
+						}
+					],
+					"scriptLines": [
+						"source(output(",
+						"          Make as string,",
+						"          Model as string,",
+						"          Category as string,",
+						"          Year as integer",
+						"     ),",
+						"     allowSchemaDrift: true,",
+						"     validateSchema: false,",
+						"     ignoreNoFilesFound: false) ~> sourceTestData",
+						"sourceTestData aggregate(groupBy(Category,",
+						"          Year,",
+						"          Make,",
+						"          Model),",
+						"     count = count('1')) ~> aggregateDeduplicate",
+						"aggregateDeduplicate select(mapColumn(",
+						"          Category,",
+						"          Year,",
+						"          Make,",
+						"          Model",
+						"     ),",
+						"     skipDuplicateMapInputs: true,",
+						"     skipDuplicateMapOutputs: true) ~> selectDeduplicatedData",
+						"selectDeduplicatedData sort(asc(Category, true),",
+						"     asc(Year, true),",
+						"     asc(Make, true),",
+						"     asc(Model, true)) ~> sortDepuplicatedData",
+						"sortDepuplicatedData sink(allowSchemaDrift: true,",
+						"     validateSchema: true,",
+						"     input(",
+						"          MAKE as string,",
+						"          MODEL as string,",
+						"          CATEGORY as string,",
+						"          YEAR as decimal(38,0)",
+						"     ),",
+						"     format: 'table',",
+						"     tableName: 'MACHINES',",
+						"     schemaName: 'RAW',",
+						"     deletable: false,",
+						"     insertable: true,",
+						"     updateable: false,",
+						"     upsertable: false,",
+						"     truncate: true,",
+						"     store: 'snowflake',",
+						"     skipDuplicateMapInputs: true,",
+						"     skipDuplicateMapOutputs: true,",
+						"     stageInsert: true) ~> sinkDataToSnowflake"
+					]
+				}
+			},
+			"dependsOn": [
+				"[concat(variables('factoryId'), '/datasets/ds_test_data_machines')]",
+				"[concat(variables('factoryId'), '/linkedServices/ls_snowflake')]",
+				"[concat(variables('factoryId'), '/linkedServices/ls_testdata')]"
+			]
 		}
 	]
 }
