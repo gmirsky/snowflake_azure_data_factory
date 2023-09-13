@@ -182,6 +182,9 @@
 						},
 						{
 							"name": "sortDepuplicatedData"
+						},
+						{
+							"name": "AssertErrors"
 						}
 					],
 					"scriptLines": [
@@ -193,7 +196,8 @@
 						"     ),",
 						"     allowSchemaDrift: true,",
 						"     validateSchema: false,",
-						"     ignoreNoFilesFound: false) ~> sourceTestData",
+						"     ignoreNoFilesFound: false,",
+						"     purgeFiles: true) ~> sourceTestData",
 						"sourceTestData aggregate(groupBy(Category,",
 						"          Year,",
 						"          Make,",
@@ -211,7 +215,8 @@
 						"     asc(Year, true),",
 						"     asc(Make, true),",
 						"     asc(Model, true)) ~> sortDepuplicatedData",
-						"sortDepuplicatedData sink(allowSchemaDrift: true,",
+						"sortDepuplicatedData assert(expectTrue(Year >= 1898 && Year < 2050, false, 'assert1')) ~> AssertErrors",
+						"AssertErrors sink(allowSchemaDrift: true,",
 						"     validateSchema: true,",
 						"     input(",
 						"          MAKE as string,",
@@ -231,6 +236,9 @@
 						"     skipDuplicateMapInputs: true,",
 						"     skipDuplicateMapOutputs: true,",
 						"     stageInsert: true,",
+						"     outputAssertFailedRows: true,",
+						"     assertFailure_fileSystem: 'raw',",
+						"     assertFailure_folderPath: 'errors',",
 						"     mapColumn(",
 						"          MAKE = Make,",
 						"          MODEL = Model,",
