@@ -1,0 +1,25 @@
+{
+	"name": "tr_on_arrival_of_new_machines_csv",
+	"properties": {
+		"description": "Trigger pipeline when a new machines. file arrives",
+		"annotations": [],
+		"runtimeState": "Started",
+		"pipelines": [
+			{
+				"pipelineReference": {
+					"referenceName": "pl_test_data_machines",
+					"type": "PipelineReference"
+				}
+			}
+		],
+		"type": "BlobEventsTrigger",
+		"typeProperties": {
+			"blobPathBeginsWith": "/raw/blobs/csv/machines.csv",
+			"ignoreEmptyBlobs": true,
+			"scope": "/subscriptions/d3b7bcaf-014c-4a5e-95fe-af002a14ab06/resourceGroups/snowflake_datafactory_rg/providers/Microsoft.Storage/storageAccounts/testdata029asa",
+			"events": [
+				"Microsoft.Storage.BlobCreated"
+			]
+		}
+	}
+}
