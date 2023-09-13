@@ -1,0 +1,104 @@
+{
+	"name": "df_test_data_machines",
+	"properties": {
+		"description": "Data flow for test data file machines",
+		"type": "MappingDataFlow",
+		"typeProperties": {
+			"sources": [
+				{
+					"dataset": {
+						"referenceName": "ds_test_data_machines",
+						"type": "DatasetReference"
+					},
+					"name": "sourceTestData"
+				}
+			],
+			"sinks": [
+				{
+					"linkedService": {
+						"referenceName": "ls_snowflake",
+						"type": "LinkedServiceReference"
+					},
+					"name": "sinkDataToSnowflake",
+					"rejectedDataLinkedService": {
+						"referenceName": "ls_testdata",
+						"type": "LinkedServiceReference"
+					}
+				}
+			],
+			"transformations": [
+				{
+					"name": "aggregateDeduplicate"
+				},
+				{
+					"name": "selectDeduplicatedData"
+				},
+				{
+					"name": "sortDepuplicatedData"
+				},
+				{
+					"name": "AssertErrors"
+				}
+			],
+			"scriptLines": [
+				"source(output(",
+				"          Make as string,",
+				"          Model as string,",
+				"          Category as string,",
+				"          Year as decimal(10,0)",
+				"     ),",
+				"     allowSchemaDrift: true,",
+				"     validateSchema: false,",
+				"     ignoreNoFilesFound: false,",
+				"     purgeFiles: true) ~> sourceTestData",
+				"sourceTestData aggregate(groupBy(Category,",
+				"          Year,",
+				"          Make,",
+				"          Model),",
+				"     count = count('1')) ~> aggregateDeduplicate",
+				"aggregateDeduplicate select(mapColumn(",
+				"          Category,",
+				"          Year,",
+				"          Make,",
+				"          Model",
+				"     ),",
+				"     skipDuplicateMapInputs: true,",
+				"     skipDuplicateMapOutputs: true) ~> selectDeduplicatedData",
+				"selectDeduplicatedData sort(asc(Category, true),",
+				"     asc(Year, true),",
+				"     asc(Make, true),",
+				"     asc(Model, true)) ~> sortDepuplicatedData",
+				"sortDepuplicatedData assert(expectTrue(Year >= 1898 && Year < 2050, false, 'assert1')) ~> AssertErrors",
+				"AssertErrors sink(allowSchemaDrift: true,",
+				"     validateSchema: true,",
+				"     input(",
+				"          MAKE as string,",
+				"          MODEL as string,",
+				"          CATEGORY as string,",
+				"          YEAR as decimal(38,0)",
+				"     ),",
+				"     format: 'table',",
+				"     tableName: 'MACHINES',",
+				"     schemaName: 'RAW',",
+				"     deletable: false,",
+				"     insertable: true,",
+				"     updateable: false,",
+				"     upsertable: false,",
+				"     truncate: true,",
+				"     store: 'snowflake',",
+				"     skipDuplicateMapInputs: true,",
+				"     skipDuplicateMapOutputs: true,",
+				"     stageInsert: true,",
+				"     outputAssertFailedRows: true,",
+				"     assertFailure_fileSystem: 'raw',",
+				"     assertFailure_folderPath: 'errors',",
+				"     mapColumn(",
+				"          MAKE = Make,",
+				"          MODEL = Model,",
+				"          CATEGORY = Category,",
+				"          YEAR = Year",
+				"     )) ~> sinkDataToSnowflake"
+			]
+		}
+	}
+}

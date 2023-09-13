@@ -1,0 +1,11 @@
+{
+	"name": "ls_testdata",
+	"properties": {
+		"description": "Link service to test data",
+		"annotations": [],
+		"type": "AzureBlobFS",
+		"typeProperties": {
+			"url": "https://testdata029asa.dfs.core.windows.net/"
+		}
+	}
+}
