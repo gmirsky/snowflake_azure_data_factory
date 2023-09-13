@@ -7,9 +7,6 @@
 		},
 		"ls_snowflake_connectionString": {
 			"value": ""
-		},
-		"AzureBlobStorage1_properties_typeProperties_serviceEndpoint": {
-			"value": "https://snowflake029asa.blob.core.windows.net/"
 		}
 	}
 }
